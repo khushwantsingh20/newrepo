@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Cart Detail{% endblock title %}
+{% block content %}
+
+
+
+<div class=" container d-flex"> 
+  <div class="col-8">
+
+        {% for item in cart_items %}
+        <div class=" card mb-4 container  " >
+          <div class="row g-0">
+            <div class="col-md-6">
+                <img src="/media/{{ item.product.img }}" style="width: 200px; height: 200px; padding: 10px;" class="img-fluid rounded-start" alt="..."> 
+            </div>
+            <div class="col-md-6">
+                <h5 class="card-title" style="font-size: 16px; margin-top: 20px;">{{ item.product.name }}</h5>
+              <div class="d-flex ">
+                  <a href="{% url 'cart:remove_to_cart' item.product.id %}" class="btn btn-danger mr-2 mt-1" style="width:10px; height:10px; margin-right:5px; color:black"></a>
+                  <p class="card-text" style="font-size: 14px; margin-bottom: 5px;">Quantity: {{ item.quantity }}</p>
+                  <a href="{% url 'cart:add_to_cart' item.product.id %}" class="btn btn-success ml-2 mt-1" style="width:10px; height:10px; margin-left:5px"></a>
+              </div>
+               <p class="card-text" style="font-size: 14px;">Total Price: {{ item.total_price }}</p>
+               <form method="post" action="{% url 'cart:remove' item.id %}" style="margin-top: 20px;">
+                {% csrf_token %}
+                <input type="submit" value="Remove from Cart" style="background-color: #dc3545; color: #fff; border: none; padding: 5px 10px; cursor: pointer;">
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+  </div>
+  <div class="col-4 " style="margin-left:100px;">
+    
+
+     <div class=" m-3 "   id="userAddress">
+      <p>Address: {{ user.profile.address }}</p>
+      <p>Landmark: {{ user.profile.landmark }}</p>
+      <p>State: {{ user.profile.state }}</p>
+      <p>Postcode: {{ user.profile.postcode }}</p>
+       
+      <button id="open-form" class="btn btn-warning mt-3" >Change Address</button>
+    </div>
+
+    
+    <div id="profile-form"  style="display: none; margin-left:50px;">
+        <form id="update-profile-form" class="mt-2 justify-content-center ">
+          {% csrf_token %}
+
+            <label for="address">Address:</label><br>
+            <input type="text" class="mb-2" id="address" name="address" required><br>
+
+            <label for="landmark">Landmark:</label><br>
+            <input type="text" class="mb-2" id="landmark" name="landmark" required><br>
+
+            <label for="state">State:</label><br>
+            <input type="text"  class="mb-2"  id="state" name="state" required><br>
+
+            <label for="postcode">Postcode:</label><br>
+            <input type="text" id="postcode" name="postcode" required><br>
+
+            <button type="submit" class="btn btn-success mt-3  justify-content-center ">Submit</button>
+            <button type="cancel" id="cancel" class="btn btn-danger mt-3  justify-content-center  ">cancel</button>
+        </form>
+    </div>
+  </div>  
+      
+     
+   
+</div>
+<div class="container" >
+      
+  <h5>Total Price: {{ total_price }}</h5>
+   <a href="{%url 'cart:cartbuy' %}" class="btn  btn-success mt-5"> place order</a>
+   <a href="/" class="btn  btn-warning mt-5"> Continue Shoping...</a>
+
+</div>
+<script>
+  $(document).ready(function() {
+      // Open the form when the button is clicked
+      $("#open-form").click(function() {
+          $("#profile-form").show();
+          $("#userAddress").hide();
+      });
+
+      $("#cancel").click(function() {
+        $("#profile-form").hide();
+        $("#userAddress").show();
+    });
+
+      // AJAX request to update the profile
+      $("#update-profile-form").submit(function(e) {
+          e.preventDefault();
+
+          $.ajax({
+              type: "POST",
+              url: "{% url 'update_profile' %}",
+              data: $(this).serialize(),
+              success: function(response) {
+                  // Update the profile information on the page
+                  $("#profile-form").hide();
+                  $("#userAddress").show();
+                  alert(response.message);
+                  window.location.reload();
+              },
+              error: function(error) {
+                  console.log(error);
+              }
+          });
+      });
+  });
+</script>
+{% endblock %}
+

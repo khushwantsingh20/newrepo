@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  form {
+    color: #243544;
+    
+    font-size: 20px ;
+    justify-content:center;
+    font-weight: normal;
+    letter-spacing: 0em;
+    line-height: 1;
+    padding:20px;
+    
+    height:auto;
+    margin-top:40px;
+    background-color:#edf5ed;
+    
+    box-shadow:0px 0px 8px #999;
+    Position:relative;
+    left:50%;
+    transform:translate(-50%);
+    margin-bottom:10px;
+  }
+  p {
+    padding:5px;
+  }
+  input{
+  width:100%;
+  height:40px;
+  margin-top:5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  
+ }
+ #img-clear_id{
+  width:10px;
+  
+ }
+ input:focus{
+  outline:none;
+  border-shadow:1px  #69b2f1;
+  border: 1px solid #69b2f1;
+}
+</style>
+  <div class="container mt-3 w-50 ">
+  <form method="post" class="shadow-lg p-3 mb-5  rounded"  enctype="multipart/form-data">
+    <h1 class="text-center">Edit Profile</h1>
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center  ">
+      <button class="btn btn-success" id="btn"  type="submit">Save Changes</button>
+      <a class="btn btn-danger mr-2 " id="btn" href="{% url 'profile' %}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

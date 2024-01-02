@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Product{% endblock title %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+{% comment %} <style>
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #fff;
+      
+    }
+    
+    li {
+      float: left;
+    }
+    
+    li a {
+      display: block;
+      color: black;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    
+    
+    </style> {% endcomment %}
+
+<section class="section-content padding-y bg">
+    <div class="container">
+    
+    <!-- ============================ COMPONENT 1 ================================= -->
+    <div class="card">{% for x in product %}
+      
+        <div class="row no-gutters">
+            <aside class="col-md-6">
+    <article class="gallery-wrap"> 
+     
+    <div class="img-big-wrap">    
+      
+		
+       <div> 
+        <div> <a href="#" class="item-thumb pt-3"> <img src="/media/{{x.img}}" style="width:400px; height:300px;"></a></div>
+       </div> 
+    </article> <!-- gallery-wrap .end// -->
+            </aside>
+            <main class="col-md-6 border-left">
+    <article class="content-body">
+    
+    <h2 class="title">{{x.name}}</h2>
+  
+    {% if x.stock == 0 %}
+    <h5 class="text-danger">!out of stock</h5>
+{% else %}
+    
+{% endif %}
+    <div class="rating-wrap my-3">
+        <ul class="rating-stars">
+            <li  class="stars-active"> 
+              {% comment %} {% for _ in x.rating|make_list %}
+              <i class="fa fa-star"></i>
+              {% endfor %} {% endcomment %}
+              {% for _ in "x"|rjust:x.rating %}
+              <i class="fa fa-star"></i>
+              {% endfor %}
+              
+            
+          
+            </li>
+            <li>
+                <i class="fa fa-star"></i> <i class="fa fa-star"></i> 
+                <i class="fa fa-star"></i> <i class="fa fa-star"></i> 
+                <i class="fa fa-star"></i> 
+            </li>
+        </ul>
+        <small class="label-rating text-muted">132 reviews</small>
+        <small class="label-rating text-success"> <i class="fa fa-clipboard-check"></i> 154  </small>
+    </div> <!-- rating-wrap.// -->
+    
+    <div class="mb-3"> 
+        <var class="price h4">₹{{x.price}}.00</var> 
+         
+    </div> <!-- price-detail-wrap .// -->
+    
+    <p>{{x.desc}}</p>
+    {% comment %} href="/bin/{{x.id}}" {% endcomment %}
+    
+    {% if request.user.is_authenticated %}
+                
+    <div class="d-flex  mt-5">{% if x.stock == 0 %}<a href="/order/{{x.id}}" id="buyn" class="btn btn-danger disabled mx-3"  >  Buy now</a>
+      <a href="{% url 'cart:add_to_cart' x.id %}" class="btn btn-danger disabled mx-3">add to cart</a>
+      {% else %}<a href="/order/{{x.id}}" id="buyn" class="btn btn-primary mx-3">  Buy now</a>
+      <a href="{% url 'cart:add_to_cart' x.id %}" class="btn btn-primary mx-3">add to cart</a>    {% endif %}
+    
+    
+
+    
+      
+     </div>
+  {% comment %} <span>Postcode :<input type="text" style="text-align:center; width:90px; height:35px" value="{{request.user.profile.postcode  }}" disabled></span>
+ <a  class="btn  btn-outline-primary my-2"  href="{% url 'profile' %}">update</a> {% endcomment %}
+ 
+  
+<div>
+
+  {% else %}
+  <a href="{% url 'signin' %}" class="btn  btn-outline-primary my-2">    Buy now</a>
+  <a href="{% url 'signin' %}" class="btn btn-primary mx-3">add to cart</a> 
+
+  
+  {% endif %}
+
+     {% comment %} <form  action="{% url 'add-to-cart' x.id %}" method="post">
+      {% csrf_token %}
+      <button class="btn  btn-outline-primary">Add to Cart</button>
+  </form>
+    {% endcomment %}
+    
+
+    {% comment %} <a href="/add_to_cart/{{x.id}}"  class="btn  btn-outline-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a> {% endcomment %}
+    </article> <!-- product-info-aside .// -->
+            </main> <!-- col.// -->
+        </div> <!-- row.// -->
+    </div> <!-- card.// -->
+    <!-- ============================ COMPONENT 1 END .// ================================= -->
+    {% endfor %}
+
+    </div>
+    </section>
+
+ 
+<div class="container">
+   <h3> You might be interested in</h3>
+    <div class="d-flex flex-wrap "style="margin:5px; margin-left:70px; padding:10px" >
+        {% for b in recomend %}
+        <div class="card" style="width: 18rem; padding:5px"> <a href="/product/{{b.id}}">
+          <img src="/media/{{b.img}}" class="card-img-top " style="width:200px; height:200px" alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="padding:10px">{{b.name}}</h5>
+            
+            <a href="/product/{{b.id}}" class="btn btn-primary">₹{{b.price}}.00</a>
+          </div></a>
+        </div>{% endfor %}
+      </div>
+    </div>    
+    
+
+   
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}order Detail{% endblock title %}
+{% block content %}
+{% load static %}
+<script src="{% static 'js/jquery.slim.min.js'%}"></script>
+<script src="{% static 'js/tether.min.js' %}"></script>
+<script src="{% static 'js/bootstrap4.min.js'%}"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script
+src="https://code.jquery.com/jquery-3.6.0.min.js"
+integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+crossorigin="anonymous"
+></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+{% csrf_token %}
+
+<div class="container mt-3 d-flex">
+  
+
+              <div class="col-8 " >{% for x in product %}
+                   <div class="row g-2 border bg-light "> 
+                    <div class="col-md-4">
+                      <img src="/media/{{x.img}}" style="width:300px; height:200px;" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-6 m-2">
+                      <div class="card-body">
+                        <h5 class="card-title">{{x.name}}</h5>
+                        <p class="card-text">₹{{x.price}}.00</p>
+                        <p class="card-text"><small class="text-body-secondary">{{x.desc}}</small></p>
+                      </div>
+                      <form method="post" action="{% url 'cart:checkout' x.id %}" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <label for="quantity">Quantity:</label><input type="number" id="quantity" name="quantity" style="width:40px" value="1" min="1" max="100"/>
+                        <br><input type="submit" value="continue" class="btn btn-success mt-4">
+                      </form>
+                      
+                    </div>
+                  </div> 
+              </div>
+              {% endfor %}
+
+            <div class="col-4"  style="padding-left:100px;">
+                        <div class="a"   id="userAddress">
+                          <p>Address: {{ user.profile.address }}</p>
+                          <p>Landmark: {{ user.profile.landmark }}</p>
+                          <p>State: {{ user.profile.state }}</p>
+                          <p>Postcode: {{ user.profile.postcode }}</p>
+                           
+                          <button id="open-form" class="btn btn-warning mt-3" >Change Address</button>
+                        </div>
+
+                        
+                        <div id="profile-form" style="display: none;">
+                            <form id="update-profile-form" class="mt-2 justify-content-center">
+                              {% csrf_token %}
+                    
+                                <label for="address">Address:</label><br>
+                                <input type="text" class="mb-2" id="address" name="address" required><br>
+                    
+                                <label for="landmark">Landmark:</label><br>
+                                <input type="text" class="mb-2" id="landmark" name="landmark" required><br>
+                    
+                                <label for="state">State:</label><br>
+                                <input type="text"  class="mb-2"  id="state" name="state" required><br>
+                    
+                                <label for="postcode">Postcode:</label><br>
+                                <input type="text" id="postcode" name="postcode" required><br>
+                    
+                                <button type="submit" class="btn btn-success mt-3 justify-content-center ">Submit</button>
+                                <button type="cancel" id="cancel" class="btn btn-danger mt-3  ">cancel</button>
+                            </form>
+                        </div>
+  
+              
+          </div>
+
+
+          </div>
+            </div>
+          </div>
+
+<div>    
+  
+  
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Open the form when the button is clicked
+        $("#open-form").click(function() {
+            $("#profile-form").show();
+            $("#userAddress").hide();
+        });
+
+        $("#cancel").click(function() {
+          $("#profile-form").hide();
+          $("#userAddress").show();
+      });
+
+        // AJAX request to update the profile
+        $("#update-profile-form").submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'update_profile' %}",
+                data: $(this).serialize(),
+                success: function(response) {
+                    // Update the profile information on the page
+                    $("#profile-form").hide();
+                    $("#userAddress").show();
+                    alert(response.message);
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}
+

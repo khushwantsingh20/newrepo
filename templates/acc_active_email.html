@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #6a5acd;
+        }
+
+        .content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        img {
+            width: 600px;
+            height: 400px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        p {
+            color: #333333;
+        }
+
+        a {
+            color: #6a5acd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hi {{ user.username }}</h1>
+    
+    <div class="content">
+        <img src="https://www.pushengage.com/wp-content/uploads/2022/02/Best-Website-Welcome-Message-Examples.png" alt="...">
+        <p>Congratulations and welcome to E-comm 🎉 We're excited to have you as part of our community of savvy shoppers</p>
+        <p>Please click on the link to confirm your registration:</p>
+        <p><a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">Confirm Registration</a></p>
+    </div>
+</body>
+</html>
+
+
+ 

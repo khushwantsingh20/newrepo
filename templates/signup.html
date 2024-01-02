@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Signup{% endblock title %}
+{% block content %}
+
+    <style>
+      form {
+        color: #243544;
+        justify-content:center;
+        width:40%;
+        letter-spacing: 0em;
+        line-height: 1;
+        padding:40px;
+        padding-top: 20px;
+        background-color:#edf5ed;
+        Position:relative;
+        left:50%;
+        transform:translate(-50%);
+        margin-bottom:10px;
+        box-shadow: 0 0 40px rgba(8,7,16,0.6);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255,255,255,0.1);
+      }
+
+      label{
+        padding-bottom:5px;
+        font-size:20px;
+
+      }
+      p {
+        padding:3px;
+      }
+     
+      input{
+        width:100%;
+        border: 0px solid #69b2f1;
+
+        height:40px;
+
+      }
+      input:focus{
+        outline:none;
+        border-shadow:1px  #69b2f1;
+        border: 1px solid #69b2f1;
+    }
+      #submit{
+        text-align:center;
+        vertical-align:middle;
+        justify-content:center; 
+        margin-left:30%;
+        font-size:20px;
+        width:40%;
+        height:40%;
+        border-radius:40px;
+        
+      }
+      
+      
+    </style>
+   <div class="container mb-3  mt-5 pt-3">
+      
+    <form method="post" >
+      <h2 class="text-center">Signup</h2>
+        {% csrf_token %}
+        {% for field in form %}
+        <p>
+          {{ field.label_tag }}<br>
+          {{ field }}
+          {% for error in field.errors %}
+            <p >{{ error }}</p>
+          {% endfor %}
+        </p>
+        {% endfor %}
+        <div class="text-center">
+           <a href="{% url 'signin' %}" >Signin</a>
+           <a href="{% url 'home' %}" >Go To Home</a>
+         </div>
+        
+        <button type="submit" id="submit" class="btn btn-primary  mt-3  ">Sign up</button>
+        
+      
+   </form>
+</div>
+{% endblock %}        
+
+
